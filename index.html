@@ -622,7 +622,7 @@ function totalOf(s){
   return t * 100 / sw;
 }
 function validEntry(e){ return !!e && Array.isArray(e.s) && e.s.length === 5 && e.s.every(v => Number.isInteger(v) && v >= 1 && v <= MAX); }
-function ownNo(){ return S.judge && S.judge.own ? Number(S.judge.own) : 0; }
+function ownNo(){ return 0; } // semua penilai ialah penilai luar: boleh menilai semua kumpulan
 function isOwn(i){ const g = S.groups[i]; return !!g && ownNo() === g.no; }
 function curGroup(){ return S.groups[S.gi] || null; }
 function myEntry(i){ const g = S.groups[i]; if (!g) return null; const e = S.mine[String(g.no)]; return validEntry(e) ? e : null; }
@@ -1055,7 +1055,7 @@ function renderBoard(){
     html += '<section class="progress"><h2>Kemajuan penilai</h2>' + (S.progress.length ?
       '<ul class="plist">' + S.progress.map(p => {
         const done = p.done || [];
-        const dots = S.groups.filter(g => g.no !== p.own).map(g => '<i class="' + (done.indexOf(g.no) >= 0 ? "on" : "") + '"></i>').join("");
+        const dots = S.groups.map(g => '<i class="' + (done.indexOf(g.no) >= 0 ? "on" : "") + '"></i>').join("");
         return '<li><span class="jn">' + esc(p.name) + (S.judge && p.id === S.judge.id ? " <em>(anda)</em>" : "") + '</span><span class="dots" aria-label="' + done.length + " daripada " + p.target + ' kumpulan">' + dots + '</span><span class="jc">' + done.length + "/" + p.target + "</span></li>";
       }).join("") + "</ul>" : '<p class="muted">Belum ada penilai didaftarkan dalam helaian Penilai.</p>') + "</section>";
   }
@@ -1090,7 +1090,7 @@ function renderSettings(){
       '<button class="btn ghost" type="button" id="adLogout">Log keluar urus setia</button></div></section>' +
     '<section class="panel"><h2>Acara</h2><label class="fld"><span>Tajuk acara</span><input id="setTitle" maxlength="120" value="' + esc(S.title) + '"></label>' +
       '<label class="tog"><input type="checkbox" id="setRank"' + (S.showRank ? " checked" : "") + '><span><b>Papar kedudukan dan anugerah</b><br><span class="muted">Matikan untuk memaparkan profil rubrik dan maklum balas sahaja, tanpa ranking. Slaid bengkel menyarankan skor Gallery Walk digunakan untuk memodelkan budaya semakan bukti.</span></span></label></section>' +
-    '<section class="panel"><h2>Kumpulan</h2><p class="hint">Untuk menambah kumpulan atau penilai, atau menetapkan kumpulan sendiri bagi penilai rakan sebaya, edit helaian Kumpulan dan Penilai dalam Google Sheet.</p>' +
+    '<section class="panel"><h2>Kumpulan</h2><p class="hint">Untuk menambah kumpulan atau penilai, edit helaian Kumpulan dan Penilai dalam Google Sheet.</p>' +
       S.groups.map(g =>
         '<div class="grow g3"><span class="gnum">' + esc(g.no) + "</span>" +
         '<label class="fld"><span>Nama kumpulan</span><input data-no="' + esc(g.no) + '" data-f="name" maxlength="60" value="' + esc(g.name) + '"></label>' +
